@@ -8,7 +8,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from webdriver_manager.chrome import ChromeDriverManager
-from bs4 import BeautifulSoup  # ✅ Import BeautifulSoup
+from bs4 import BeautifulSoup 
 
 # Set up logging
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
@@ -112,8 +112,8 @@ for year in years:
 
 # Save orders to CSV
 df = pd.DataFrame(all_orders)
-df.to_csv("amazon_orders.csv", index=False, encoding="utf-8-sig")  # ✅ Added encoding for special characters
-logging.info("✅ Saved all orders to amazon_orders.csv")
+df.to_csv("dataset.csv", index=False, encoding="utf-8-sig")  # ✅ Added encoding for special characters
+logging.info("✅ Saved all orders to dataset.csv")
 
 input("Press Enter to close the browser...")
 driver.quit()
