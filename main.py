@@ -29,7 +29,7 @@ amazon_orders_url = "https://www.amazon.in/gp/css/order-history?ref_=nav_Account
 driver.get(amazon_orders_url)
 time.sleep(5)  # Wait for the page to load
 
-logging.info("✅ Amazon order history page loaded.")
+logging.info("Amazon order history page loaded.")
 
 # List of years to scrape
 years = ["2024", "2023", "2022", "2021","2020","2019","2018","2017"]
@@ -50,39 +50,39 @@ for year in years:
         option_year.click()
         time.sleep(5)
 
-        logging.info(f"✅ Successfully changed filter to {year}.")
+        logging.info(f"Successfully changed filter to {year}.")
 
     except Exception as e:
-        logging.warning(f"⚠️ Could not select {year} filter: {e}")
+        logging.warning(f"Could not select {year} filter: {e}")
         continue  # Skip this year and move to the next
 
     # Extract orders for the selected year
     while True:
-        # ✅ Use BeautifulSoup to parse the page source
+        #Use BeautifulSoup to parse the page source
         soup = BeautifulSoup(driver.page_source, "html.parser")
 
         order_elements = soup.select("div.order-card.js-order-card")  # Select all order blocks
 
         for order in order_elements:
             try:
-                # ✅ Extract Order Number
+                #Extract Order Number
                 order_number_element = order.find("span", text=re.compile("Order #"))
                 order_number = order_number_element.find_next_sibling("span").text.strip() if order_number_element else "N/A"
 
-                # ✅ Extract Order Date Correctly
+                #Extract Order Date Correctly
                 order_date_element = order.select_one("div.a-column.a-span3 div.a-row span.a-size-base")
                 order_date = order_date_element.text.strip() if order_date_element else "Unknown Date"
 
-                # ✅ Extract Order Total Correctly
+                #Extract Order Total Correctly
                 order_total_element = order.select_one("div.a-column.a-span2 div.a-row span.a-size-base")
                 order_total = order_total_element.text.strip() if order_total_element else "N/A"
 
 
-                # ✅ Extract Product Title
+                #Extract Product Title
                 product_title_element = order.select_one("div.yohtmlc-product-title")
                 product_title = product_title_element.text.strip() if product_title_element else "No Product Found"
 
-                # ✅ Fix Encoding Issues
+                #Fix Encoding Issues
                 product_title = product_title.encode("utf-8", "ignore").decode("utf-8")
 
                 # Store the order details
@@ -95,9 +95,9 @@ for year in years:
                 })
 
             except Exception as e:
-                logging.warning(f"⚠️ Skipping an order due to error: {e}")
+                logging.warning(f"Skipping an order due to error: {e}")
 
-        logging.info(f"📌 Extracted {len(all_orders)} orders so far for {year}.")
+        logging.info(f"Extracted {len(all_orders)} orders so far for {year}.")
 
         # Try to go to the next page
         try:
@@ -112,8 +112,8 @@ for year in years:
 
 # Save orders to CSV
 df = pd.DataFrame(all_orders)
-df.to_csv("dataset.csv", index=False, encoding="utf-8-sig")  # ✅ Added encoding for special characters
-logging.info("✅ Saved all orders to dataset.csv")
+df.to_csv("dataset.csv", index=False, encoding="utf-8-sig")  # Added encoding for special characters
+logging.info("Saved all orders to dataset.csv")
 
 input("Press Enter to close the browser...")
 driver.quit()
