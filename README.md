@@ -17,17 +17,14 @@ This project provides a comprehensive analysis of your Amazon order history thro
 The project is organized into several key modules:
 
 1. **Web Scraping Module**: Handles the extraction of order data from Amazon.
-   - Libraries used:
-     - `requests`: To manage HTTP requests and handle sessions.
-     - `BeautifulSoup`: For parsing HTML and navigating the document tree.
+   - `requests`: To manage HTTP requests and handle sessions.
+   - `BeautifulSoup`: For parsing HTML and navigating the document tree.
 
 2. **Data Processing Module**: Cleans and structures the scraped data for analysis.
-   - Libraries used:
-     - `pandas`: For data manipulation and analysis.
-     - `numpy`: To handle numerical operations and manage data arrays.
+   - `pandas`: For data manipulation and analysis.
+   - `numpy`: To handle numerical operations and manage data arrays.
 
 3. **Visualization Module**: Creates visual representations of the data to uncover trends and patterns.
-   - Libraries used:
-     - `matplotlib`: For creating static, animated, and interactive visualizations.
-     - `seaborn`: To generate informative and attractive statistical graphics.
+   - `matplotlib`: For creating static, animated, and interactive visualizations.
+   - `seaborn`: To generate informative and attractive statistical graphics.
 
