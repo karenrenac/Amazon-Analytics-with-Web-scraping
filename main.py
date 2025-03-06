@@ -15,7 +15,7 @@ logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(
 
 # Set up Chrome options
 options = webdriver.ChromeOptions()
-options.add_argument("user-data-dir=C:/Users/KAREN/AppData/Local/Google/Chrome/SeleniumProfile")
+options.add_argument("user-data-dir=C:/Users/KAREN/AppData/Local/Google/Chrome/SeleniumProfile") #Create a new chrome profile called SeleniumProfile
 options.add_argument("profile-directory=Default")  # Change if needed
 options.add_experimental_option("excludeSwitches", ["enable-automation"])
 options.add_experimental_option("useAutomationExtension", False)
