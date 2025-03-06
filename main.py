@@ -15,14 +15,21 @@ logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(
 
 # Set up Chrome options
 options = webdriver.ChromeOptions()
-options.add_argument("user-data-dir=C:/Users/KAREN/AppData/Local/Google/Chrome/User Data")
-options.add_argument("profile-directory=Profile 2")  # Change this if needed
+options.add_argument("user-data-dir=C:/Users/KAREN/AppData/Local/Google/Chrome/SeleniumProfile")
+options.add_argument("profile-directory=Default")  # Change if needed
 options.add_experimental_option("excludeSwitches", ["enable-automation"])
 options.add_experimental_option("useAutomationExtension", False)
 options.add_experimental_option("detach", True)  # Keep Chrome open
 
 # Start WebDriver
 driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
+
+
+# Open Amazon Login Page
+amazon_login_url = "https://www.amazon.com/ap/signin?openid.pape.max_auth_age=900&openid.return_to=https%3A%2F%2Fwww.amazon.com%3F&openid.assoc_handle=usflex&openid.mode=checkid_setup&openid.ns=http%3A%2F%2Fspecs.openid.net%2Fauth%2F2.0"
+driver.get(amazon_login_url)
+time.sleep(3)  # Allow page to load
+
 
 # Open Amazon Order History page
 amazon_orders_url = "https://www.amazon.in/gp/css/order-history?ref_=nav_AccountFlyout_orders"
@@ -38,24 +45,33 @@ all_orders = []
 # Loop through each year and extract orders
 for year in years:
     try:
-        # Open the filter dropdown
+        # Open the dropdown menu
         dropdown = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.ID, "a-autoid-1-announce")))
         dropdown.click()
-        time.sleep(2)
+        time.sleep(2)  # Allow dropdown to expand
 
-        # Select the year from dropdown
-        option_year = WebDriverWait(driver, 10).until(
-            EC.element_to_be_clickable((By.XPATH, f"//a[contains(text(), '{year}')]"))
-        )
-        option_year.click()
-        time.sleep(5)
+        # Find all year options available in the dropdown
+        year_options = driver.find_elements(By.XPATH, "//a[contains(@class, 'a-dropdown-link')]")
+        available_years = [option.text.strip() for option in year_options]
 
-        logging.info(f"Successfully changed filter to {year}.")
+        # Debugging: Print available years to ensure 2024 is there
+        print("Available years:", available_years)
+
+        # Ensure the year is selectable before clicking
+        if year in available_years:
+            option_year = WebDriverWait(driver, 10).until(
+                EC.element_to_be_clickable((By.XPATH, f"//a[contains(text(), '{year}')]"))
+            )
+            option_year.click()
+            time.sleep(5)  # Wait for orders to load
+            logging.info(f"Successfully changed filter to {year}.")
+        else:
+            logging.warning(f"Year {year} not found in dropdown. Skipping...")
+            continue  # Move to next year if not available
 
     except Exception as e:
         logging.warning(f"Could not select {year} filter: {e}")
-        continue  # Skip this year and move to the next
-
+        continue  # Skip to the next year
     # Extract orders for the selected year
     while True:
         #Use BeautifulSoup to parse the page source
